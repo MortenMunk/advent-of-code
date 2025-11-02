@@ -1,6 +1,12 @@
-fn get_start_pos(matrix: Vec<Vec<char>>) -> (i32, i32) {
-    let x: i32 = 0;
-    let y: i32 = 0;
+fn get_start_pos(matrix: &[Vec<char>]) -> (i32, i32) {
+    for (y, row) in matrix.iter().enumerate() {
+        for (x, &c) in row.iter().enumerate() {
+            if matches!(c, '^' | 'v' | '<' | '>') {
+                return (y as i32, x as i32);
+            }
+        }
+    }
+    (0, 0)
 }
 
 fn main() {
@@ -8,4 +14,5 @@ fn main() {
         .lines()
         .map(|x| x.chars().collect())
         .collect();
+    let start = get_start_pos(&content);
 }
