@@ -32,40 +32,43 @@ fn change_dir(dir: Direction) -> Direction {
 }
 
 fn main() {
-    let content: Vec<Vec<char>> = include_str!("../../inputs/day06a.txt")
+    let mut counter: i32 = 0;
+    let mut content: Vec<Vec<char>> = include_str!("../../inputs/day06a.txt")
         .lines()
         .map(|x| x.chars().collect())
         .collect();
     if let Some((mut y, mut x, mut dir)) = get_start_pos(&content) {
         let height: i32 = content.len() as i32;
         let width: i32 = content[0].len() as i32;
-        let mut counter: i32 = 0;
         while y >= 0 && y < height && x >= 0 && x < width {
-            counter += 1;
+            if content[y as usize][x as usize] != 'X' {
+                counter += 1;
+                content[y as usize][x as usize] = 'X';
+            }
             match dir {
                 Direction::North => {
-                    if content[x][y] != '#' {
+                    if y > 0 && content[(y - 1) as usize][x as usize] != '#' {
                         y -= 1;
                     } else {
                         dir = change_dir(dir);
                     }
                 }
                 Direction::East => {
-                    if content[x][y] != '#' {
+                    if x + 1 < width && content[y as usize][(x + 1) as usize] != '#' {
                         x += 1;
                     } else {
                         dir = change_dir(dir);
                     }
                 }
                 Direction::South => {
-                    if content[x][y] != '#' {
+                    if y + 1 < height && content[(y + 1) as usize][x as usize] != '#' {
                         y += 1;
                     } else {
                         dir = change_dir(dir);
                     }
                 }
                 Direction::West => {
-                    if content[x][y] != '#' {
+                    if x > 0 && content[y as usize][(x - 1) as usize] != '#' {
                         x -= 1;
                     } else {
                         dir = change_dir(dir);
@@ -73,6 +76,7 @@ fn main() {
                 }
             }
         }
+        println!("{counter}")
     } else {
         println!("No position found");
     }
