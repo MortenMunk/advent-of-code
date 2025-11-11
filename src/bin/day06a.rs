@@ -40,40 +40,28 @@ fn main() {
     if let Some((mut y, mut x, mut dir)) = get_start_pos(&content) {
         let height: i32 = content.len() as i32;
         let width: i32 = content[0].len() as i32;
-        while y >= 0 && y < height && x >= 0 && x < width {
+        loop {
             if content[y as usize][x as usize] != 'X' {
                 counter += 1;
                 content[y as usize][x as usize] = 'X';
             }
-            match dir {
-                Direction::North => {
-                    if y > 0 && content[(y - 1) as usize][x as usize] != '#' {
-                        y -= 1;
-                    } else {
-                        dir = change_dir(dir);
-                    }
-                }
-                Direction::East => {
-                    if x + 1 < width && content[y as usize][(x + 1) as usize] != '#' {
-                        x += 1;
-                    } else {
-                        dir = change_dir(dir);
-                    }
-                }
-                Direction::South => {
-                    if y + 1 < height && content[(y + 1) as usize][x as usize] != '#' {
-                        y += 1;
-                    } else {
-                        dir = change_dir(dir);
-                    }
-                }
-                Direction::West => {
-                    if x > 0 && content[y as usize][(x - 1) as usize] != '#' {
-                        x -= 1;
-                    } else {
-                        dir = change_dir(dir);
-                    }
-                }
+
+            let (next_y, next_x) = match dir {
+                Direction::North => (y - 1, x),
+                Direction::East => (y, x + 1),
+                Direction::South => (y + 1, x),
+                Direction::West => (y, x - 1),
+            };
+
+            if next_y < 0 || next_y >= height || next_x < 0 || next_x >= width {
+                break;
+            }
+
+            if content[next_y as usize][next_x as usize] == '#' {
+                dir = change_dir(dir);
+            } else {
+                y = next_y;
+                x = next_x;
             }
         }
         println!("{counter}")
