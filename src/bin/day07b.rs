@@ -9,6 +9,10 @@ fn main() {
     println!("{sum:?}")
 }
 
+fn concat(a: i64, b: i64) -> i64 {
+    a * 10i64.pow(b.ilog10() + 1) + b
+}
+
 fn try_operation(acc: i64, rest: &[i64], target: i64) -> bool {
     if rest.is_empty() {
         acc == target
@@ -17,6 +21,7 @@ fn try_operation(acc: i64, rest: &[i64], target: i64) -> bool {
 
         try_operation(acc + next, &rest[1..], target)
             || try_operation(acc * next, &rest[1..], target)
+            || try_operation(concat(acc, next), &rest[1..], target)
     }
 }
 
