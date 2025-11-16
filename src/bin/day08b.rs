@@ -1,9 +1,9 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 fn main() {
     let input = read_input();
     let mut antennas: HashMap<char, Vec<Cord>> = HashMap::new();
-    let mut unique = HashSet::new();
+    let mut counter: i64 = 0;
 
     for (row_index, row) in input.iter().enumerate() {
         for (col_index, ch) in row.iter().enumerate() {
@@ -22,30 +22,34 @@ fn main() {
                 let p1 = &vals[i];
                 let p2 = &vals[j];
 
-                let dr: i64 = p2.row - p1.row;
-                let dc: i64 = p2.col - p1.col;
+                let dr: i64 = p1.row - p2.row;
+                let dc: i64 = p1.col - p2.col;
 
-                let dir1 = Cord {
-                    row: p1.row - dr,
-                    col: p1.col - dc,
+                let mut dir1 = Cord {
+                    row: p1.row + dr,
+                    col: p1.col + dc,
                 };
 
-                let dir2 = Cord {
-                    row: p2.row + dr,
-                    col: p2.col + dc,
+                let mut dir2 = Cord {
+                    row: p2.row - dr,
+                    col: p2.col - dc,
                 };
 
-                if is_in_bounds(&dir1, &input) {
-                    unique.insert((dir1.row, dir1.col));
+                while is_in_bounds(&dir1, &input) {
+                    counter += 1;
+                    dir1.row += dr;
+                    dir1.col += dc;
                 }
 
-                if is_in_bounds(&dir2, &input) {
-                    unique.insert((dir2.row, dir2.col));
+                while is_in_bounds(&dir2, &input) {
+                    counter += 1;
+                    dir2.row -= dr;
+                    dir2.col -= dc;
                 }
             }
         }
     }
-    println!("{}", unique.len());
+    println!("{counter}");
 }
 
 struct Cord {
