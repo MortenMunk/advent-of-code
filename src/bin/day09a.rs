@@ -1,7 +1,29 @@
 fn main() {
     let input: Vec<char> = read_input();
-    let filesys: Vec<String> = init_filesys(&input);
-    println!("{filesys:?}");
+    let mut filesys: Vec<String> = init_filesys(&input);
+    let mut start: usize = 0;
+    let mut end: usize = find_last(&filesys);
+    let mut sum: u64 = 0;
+    while start < end {
+        if filesys[start] == "." {
+            while filesys[end] == "." {
+                end -= 1;
+            }
+            if end > start {
+                let (left, right) = filesys.split_at_mut(end);
+                std::mem::swap(&mut left[start], &mut right[0]);
+                end -= 1;
+            }
+        } else {
+            start += 1;
+        }
+    }
+    for (i, item) in filesys.iter().enumerate() {
+        if item != "." {
+            sum += item.parse::<u64>().unwrap() * i as u64;
+        }
+    }
+    println!("{sum}");
 }
 
 fn read_input() -> Vec<char> {
@@ -27,4 +49,13 @@ fn init_filesys(input: &[char]) -> Vec<String> {
         }
     });
     filesys
+}
+
+fn find_last(filesys: &[String]) -> usize {
+    for (i, item) in filesys.iter().enumerate().rev() {
+        if item != "." {
+            return i;
+        }
+    }
+    0
 }
