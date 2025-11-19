@@ -14,9 +14,8 @@ fn main() {
                 std::mem::swap(&mut left[start], &mut right[0]);
                 end -= 1;
             }
-        } else {
-            start += 1;
         }
+        start += 1;
     }
     for (i, item) in filesys.iter().enumerate() {
         if item != "." {
@@ -35,13 +34,16 @@ fn init_filesys(input: &[char]) -> Vec<String> {
     let mut inc: i32 = 0;
     let mut is_free: bool = false;
     input.iter().for_each(|x| {
+        if !x.is_ascii_digit() {
+            return;
+        }
         if is_free {
-            for _ in 0..*x as i32 {
+            for _ in 0..x.to_digit(10).unwrap() {
                 filesys.push(".".to_string());
             }
             is_free = false;
         } else {
-            for _ in 0..*x as i32 {
+            for _ in 0..x.to_digit(10).unwrap() {
                 filesys.push(inc.to_string());
             }
             inc += 1;
