@@ -1,9 +1,19 @@
-use std::collections::HashSet;
+use std::collections::{HashSet, VecDeque};
 
 fn main() {
     let input = read_input();
     let start_points = init_start_points(&input);
     let mut end_points: HashSet<Coord> = HashSet::new();
+}
+
+fn search_from(input: &[Vec<char>], start: Coord) -> HashSet<Coord> {
+    let mut visited = HashSet::new();
+    let mut end_points = HashSet::new();
+    let mut frontier = Vec::new().push(start);
+
+    while !frontier.is_empty() {
+        let current = frontier.pop;
+    }
 }
 
 #[derive(Hash, PartialEq, Eq)]
