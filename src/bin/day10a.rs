@@ -1,22 +1,66 @@
-use std::collections::{HashSet, VecDeque};
+use std::collections::HashSet;
 
 fn main() {
     let input = read_input();
     let start_points = init_start_points(&input);
-    let mut end_points: HashSet<Coord> = HashSet::new();
+    let counter: i64 = start_points
+        .iter()
+        .map(|x| search_from(&input, *x).len() as i64)
+        .sum();
+    println!("{counter:?}");
 }
 
 fn search_from(input: &[Vec<char>], start: Coord) -> HashSet<Coord> {
     let mut visited = HashSet::new();
     let mut end_points = HashSet::new();
-    let mut frontier = Vec::new().push(start);
+    let mut frontier = Vec::new();
+    frontier.push(start);
 
-    while !frontier.is_empty() {
-        let current = frontier.pop;
+    while let Some(current) = frontier.pop() {
+        if visited.contains(&current) {
+            continue;
+        }
+
+        visited.insert(current);
+
+        if input[current.y][current.x] == '9' {
+            let point = Coord {
+                x: current.x,
+                y: current.y,
+            };
+            end_points.insert(point);
+            continue;
+        }
+
+        if can_move_up(input, current) {
+            frontier.push(Coord {
+                x: current.x,
+                y: current.y - 1,
+            });
+        }
+        if can_move_down(input, current) {
+            frontier.push(Coord {
+                x: current.x,
+                y: current.y + 1,
+            });
+        }
+        if can_move_left(input, current) {
+            frontier.push(Coord {
+                x: current.x - 1,
+                y: current.y,
+            });
+        }
+        if can_move_right(input, current) {
+            frontier.push(Coord {
+                x: current.x + 1,
+                y: current.y,
+            });
+        }
     }
+    end_points
 }
 
-#[derive(Hash, PartialEq, Eq)]
+#[derive(Hash, PartialEq, Eq, Clone, Copy)]
 struct Coord {
     x: usize,
     y: usize,
