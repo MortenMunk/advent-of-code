@@ -2,8 +2,8 @@ fn main() {
     let mut input = read_input();
     for _ in 0..25 {
         input = blink(input);
-        println!("{:?}", input);
     }
+    println!("{}", input.len());
 }
 
 fn read_input() -> Vec<String> {
@@ -22,11 +22,20 @@ fn blink(input: Vec<String>) -> Vec<String> {
             let (first, second) = x.split_at(x.len() / 2);
             // remove trailing zeroes
             new_vec.push(first.to_string());
-            new_vec.push(second.to_string());
+            new_vec.push(remove_zeros(second.to_string()));
         } else {
             let temp: i64 = x.parse::<i64>().unwrap_or(0) * 2024;
             new_vec.push(temp.to_string());
         }
     }
     new_vec
+}
+
+fn remove_zeros(x: String) -> String {
+    let trimmed: String = x.trim_start_matches('0').to_string();
+    if !trimmed.is_empty() {
+        trimmed
+    } else {
+        "0".to_string()
+    }
 }
