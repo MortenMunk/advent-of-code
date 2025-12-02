@@ -13,21 +13,22 @@ fn count_zeros(input: Vec<Vec<char>>) -> i32 {
     let mut counter: i32 = 0;
     for elem in input.iter() {
         let dir: char = elem[0];
-        let num_move: i32 = elem[1..].iter().collect::<String>().parse::<i32>().unwrap();
+        let num_move: i32 = get_clicks(elem);
+        let prev: i32 = current;
+
         if dir == 'R' {
-            let distance_to_zero = 100 - current;
-            if num_move >= distance_to_zero {
-                counter += (num_move - distance_to_zero) / 100 + 1;
-            }
-            current = (current + num_move).rem_euclid(100);
+            current += num_move;
+            counter += current.div_euclid(100) - prev.div_euclid(100);
         } else {
-            if num_move > current + 1 {
-                counter += (num_move - current) / 100 + 1;
-            }
-            current = (current - num_move).rem_euclid(100);
+            current -= num_move;
+            counter += (prev - 1).div_euclid(100) - (current - 1).div_euclid(100);
         }
     }
     counter
+}
+
+fn get_clicks(elem: &[char]) -> i32 {
+    elem[1..].iter().collect::<String>().parse::<i32>().unwrap()
 }
 
 #[cfg(test)]
