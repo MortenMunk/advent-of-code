@@ -10,24 +10,17 @@ fn main() {
         id_list.insert(x.parse::<u64>().unwrap());
     });
 
-    ranges.lines().for_each(|x| {
-        if let Some((lhs, rhs)) = x.split_once("-") {
-            let start: u64 = lhs.trim().parse::<u64>().unwrap();
-            let end: u64 = rhs.trim().parse::<u64>().unwrap();
-
-            for &id in id_list.clone().iter() {
-                if id < start && id > end {
-                    continue;
-                } else {
-                    for x in start..end {
-                        if id_list.contains(&x) {
-                            counter += 1;
-                            id_list.remove(&x);
-                        }
-                    }
+    for id in id_list.iter() {
+        for x in ranges.lines() {
+            if let Some((lhs, rhs)) = x.split_once("-") {
+                let start: u64 = lhs.trim().parse::<u64>().unwrap();
+                let end: u64 = rhs.trim().parse::<u64>().unwrap();
+                if *id >= start && *id <= end {
+                    counter += 1;
+                    break;
                 }
             }
         }
-    });
+    }
     println!("{}", counter);
 }
