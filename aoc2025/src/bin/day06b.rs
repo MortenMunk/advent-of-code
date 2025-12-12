@@ -1,4 +1,5 @@
 fn main() {
+    // NOT DONE!!!
     let input: Vec<Vec<&str>> = include_str!("../../inputs/day06.txt")
         .lines()
         .map(|x| x.split_whitespace().collect())
