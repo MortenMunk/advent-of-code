@@ -14,12 +14,14 @@ fn main() {
     let mut largest = 0;
     for (l, r) in &input {
         for (l_x, r_x) in &input {
-            let diff_l = max(*l, *l_x) - min(*l, *l_x) + 1;
-            let diff_r = max(*r, *r_x) - min(*r, *r_x) + 1;
-            let area: usize = diff_l * diff_r;
+            // Find bouding box
+            // Check if valid
 
-            if area > largest {
-                largest = area;
+            if is_valid_rect(p1, p2, s) {
+                let area = diff_l * diff_r;
+                if area > largest {
+                    largest = area;
+                }
             }
         }
     }
