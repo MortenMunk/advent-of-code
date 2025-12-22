@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 #[derive(Debug)]
 struct LineData<'a> {
     device: &'a str,
@@ -9,7 +11,28 @@ fn main() {
         .lines()
         .map(parseline)
         .collect();
-    println!("{:?}", input[0]);
+
+    let mut graph = HashMap::new();
+    for line in input {
+        graph.insert(line.device, line.output);
+    }
+
+    let paths = count_paths("you", &graph);
+    println!("{}", paths);
+}
+
+fn count_paths(node: &str, graph: &HashMap<&str, Vec<&str>>) -> u64 {
+    if node == "out" {
+        return 1;
+    }
+
+    let mut total = 0;
+    if let Some(neighbors) = graph.get(node) {
+        for next in neighbors {
+            total += count_paths(next, graph);
+        }
+    }
+    total
 }
 
 fn parseline<'a>(s: &'a str) -> LineData<'a> {
